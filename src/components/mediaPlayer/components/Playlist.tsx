@@ -7,59 +7,60 @@ import {
 import { getMedia } from "utils/getMedia.utils";
 
 type PlaylistProps = {
-  setCurrentMediaIndex: (index: number) => void;
-  currentMediaIndex: number;
+  selectedIndex: number;
   playlist: Media[];
-  setPlaylist: (Playlist: Media[]) => void;
+  onAddMedia: (media: Media) => void;
+  onRemoveMedia: (media: Media) => void;
+  onSelectMedia: (media: Media) => void;
 };
 
 export const Playlist = ({
-  setCurrentMediaIndex,
-  currentMediaIndex,
+  selectedIndex,
   playlist,
-  setPlaylist,
+  onAddMedia,
+  onRemoveMedia,
+  onSelectMedia,
 }: PlaylistProps) => {
   const [inputValue, setInputValue] = useState("");
+
+  const addMedia = () => {
+    const newMedia = getMedia(inputValue);
+    if (newMedia) {
+      onAddMedia(newMedia);
+    }
+    setInputValue("");
+  };
+
   return (
     <StyledPlaylistContainer>
-      <input
-        type="text"
-        placeholder="Add video url"
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            const newMedia = getMedia(inputValue);
-            if (newMedia) {
-              setPlaylist([...playlist, newMedia]);
+      <div>
+        <input
+          type="text"
+          placeholder="Add video url"
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              addMedia();
             }
-            setInputValue("");
-          }
-        }}
-        value={inputValue}
-        onChange={(e) => {
-          setInputValue(e.target.value);
-        }}
-      />
+          }}
+          value={inputValue}
+          onChange={(e) => {
+            setInputValue(e.target.value);
+          }}
+        />
+        <button onClick={addMedia}>Add Media</button>
+      </div>
       {playlist.map((media, index) => (
         <StyledPlaylistItem
           key={`media-list-item-${media.title}`}
-          isSelected={currentMediaIndex === index}
+          isSelected={selectedIndex === index}
         >
           <div
             className="media-list-item-title"
-            onClick={() => setCurrentMediaIndex(index)}
+            onClick={() => onSelectMedia(media)}
           >
             {media.title}
           </div>
-          <button
-            onClick={() => {
-              if (currentMediaIndex >= index) {
-                setCurrentMediaIndex(currentMediaIndex - 1);
-              }
-              setPlaylist(playlist.filter((_, i) => i !== index));
-            }}
-          >
-            X
-          </button>
+          <button onClick={() => onRemoveMedia(media)}>X</button>
         </StyledPlaylistItem>
       ))}
     </StyledPlaylistContainer>

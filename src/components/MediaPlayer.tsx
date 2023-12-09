@@ -5,6 +5,7 @@ import {
   StyledMediaPlayerContainer,
 } from "./mediaPlayer/Mediaplayer.styles";
 import { getDefaultMedia } from "utils/getDefaultMedia.utils";
+import { Media } from "utils/types";
 
 const defaultMedia = getDefaultMedia();
 
@@ -34,6 +35,18 @@ export const MediaPlayer = () => {
     );
   };
 
+  const removeMedia = (media: Media) => {
+    const index = playlist.findIndex((m) => m === media);
+
+    // If removing media earlier than current media, we need to
+    // adjust the current media index to not change the current media playing
+    if (currentMediaIndex && currentMediaIndex >= index) {
+      changeMedia(currentMediaIndex - 1);
+    }
+
+    setPlaylist([...playlist.slice(0, index), ...playlist.slice(index + 1)]);
+  };
+
   const seek = (seconds: number) => {
     const video = videoRef.current;
     if (!video) {
@@ -47,25 +60,32 @@ export const MediaPlayer = () => {
   return (
     <StyledMediaPlayerContainer>
       <StyledMainContentContainer>
-        <Video
-          ref={videoRef}
-          src={currentMedia.sources[0]}
-          setIsPlaying={setIsPlaying}
-        />
-        <Controls
-          onTogglePlay={togglePlay}
-          isPlaying={isPlaying}
-          onSeekForward={() => seek(10)}
-          onSeekBackward={() => seek(-10)}
-          onNext={() => changeMedia(currentMediaIndex + 1)}
-          onPrevious={() => changeMedia(currentMediaIndex - 1)}
-        />
+        {currentMedia && (
+          <>
+            <Video
+              ref={videoRef}
+              src={currentMedia.sources[0]}
+              setIsPlaying={setIsPlaying}
+            />
+            <Controls
+              onTogglePlay={togglePlay}
+              isPlaying={isPlaying}
+              onSeekForward={() => seek(10)}
+              onSeekBackward={() => seek(-10)}
+              onNext={() => changeMedia(currentMediaIndex + 1)}
+              onPrevious={() => changeMedia(currentMediaIndex - 1)}
+            />
+          </>
+        )}
       </StyledMainContentContainer>
       <Playlist
-        setCurrentMediaIndex={changeMedia}
-        currentMediaIndex={currentMediaIndex}
+        selectedIndex={currentMediaIndex}
         playlist={playlist}
-        setPlaylist={setPlaylist}
+        onAddMedia={(media) => setPlaylist([...playlist, media])}
+        onRemoveMedia={removeMedia}
+        onSelectMedia={(media) =>
+          changeMedia(playlist.findIndex((m) => m === media))
+        }
       />
     </StyledMediaPlayerContainer>
   );

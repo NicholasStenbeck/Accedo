@@ -64,8 +64,9 @@ export const MediaPlayer = () => {
           <>
             <Video
               ref={videoRef}
-              src={currentMedia.sources[0]}
-              setIsPlaying={setIsPlaying}
+              media={currentMedia}
+              onPause={() => setIsPlaying(false)}
+              onPlay={() => setIsPlaying(true)}
             />
             <Controls
               onTogglePlay={togglePlay}

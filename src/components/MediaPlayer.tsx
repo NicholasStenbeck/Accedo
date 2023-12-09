@@ -61,6 +61,7 @@ export const MediaPlayer = () => {
           <>
             <Video
               ref={videoRef}
+              key={currentMediaIndex}
               media={currentMedia}
               onPause={() => setIsPlaying(false)}
               onPlay={() => setIsPlaying(true)}

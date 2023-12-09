@@ -3,22 +3,12 @@ import { Media } from "utils/types";
 
 type VideoProps = {
   media: Media;
-  onPlay: () => void;
-  onPause: () => void;
-};
+} & Omit<React.VideoHTMLAttributes<HTMLVideoElement>, "src">;
 
 export const Video = React.forwardRef<HTMLVideoElement, VideoProps>(
-  ({ media, onPause, onPlay }: VideoProps, ref) => {
+  ({ media, ...rest }: VideoProps, ref) => {
     return (
-      <video
-        ref={ref}
-        key={JSON.stringify(media)}
-        autoPlay
-        controls
-        width={1280}
-        onPause={() => onPause()}
-        onPlay={() => onPlay()}
-      >
+      <video ref={ref} autoPlay controls width={1280} {...rest}>
         {media.sources.map((src) => (
           <source key={src} src={src} />
         ))}

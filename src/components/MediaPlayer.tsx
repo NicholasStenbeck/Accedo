@@ -6,10 +6,10 @@ import {
 } from "./mediaPlayer/Mediaplayer.styles";
 import { getDefaultMedia } from "utils/getDefaultMedia.utils";
 
-const defaultMedia = getDefaultMedia();
+const DEFAULT_MEDIA = getDefaultMedia();
 
 export const MediaPlayer = () => {
-  const [playlist, setPlaylist] = useState(defaultMedia);
+  const [playlist, setPlaylist] = useState(DEFAULT_MEDIA);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);

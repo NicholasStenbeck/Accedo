@@ -16,21 +16,30 @@ export const MediaPlayer = () => {
 
   const togglePlay = () => {
     const video = videoRef.current;
-    if (video) {
-      if (!isPlaying) {
-        video.play();
-      } else {
-        video.pause();
-      }
+    if (!video) {
+      return;
+    }
+
+    if (!isPlaying) {
+      video.play();
+    } else {
+      video.pause();
     }
   };
 
   const changeMedia = (index: number) => {
-    console.log("changeMedia -> index:", index);
     setIsPlaying(false);
     setCurrentMediaIndex(
       index < 0 ? playlist.length - 1 : index % playlist.length
     );
+  };
+
+  const seek = (seconds: number) => {
+    const video = videoRef.current;
+    if (!video) {
+      return;
+    }
+    video.currentTime += seconds;
   };
 
   const currentMedia = playlist[currentMediaIndex];
@@ -44,11 +53,12 @@ export const MediaPlayer = () => {
           setIsPlaying={setIsPlaying}
         />
         <Controls
-          videoRef={videoRef}
-          togglePlay={togglePlay}
+          onTogglePlay={togglePlay}
           isPlaying={isPlaying}
-          setMediaIndex={changeMedia}
-          currentMediaIndex={currentMediaIndex}
+          onSeekForward={() => seek(10)}
+          onSeekBackward={() => seek(-10)}
+          onNext={() => changeMedia(currentMediaIndex + 1)}
+          onPrevious={() => changeMedia(currentMediaIndex - 1)}
         />
       </StyledMainContentContainer>
       <Playlist

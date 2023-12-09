@@ -9,55 +9,37 @@ import {
 } from "assets/icons";
 
 type ControlsProps = {
-  videoRef: React.RefObject<HTMLVideoElement>;
-  togglePlay: () => void;
+  onTogglePlay: () => void;
   isPlaying: boolean;
-  setMediaIndex: (index: number) => void;
-  currentMediaIndex: number;
+  onSeekForward: () => void;
+  onSeekBackward: () => void;
+  onNext: () => void;
+  onPrevious: () => void;
 };
 
 export const Controls = ({
-  videoRef,
-  togglePlay,
+  onTogglePlay,
   isPlaying,
-  setMediaIndex,
-  currentMediaIndex,
+  onPrevious,
+  onNext,
+  onSeekBackward,
+  onSeekForward,
 }: ControlsProps) => {
-  const video = videoRef.current;
-
-  const next = () => {
-    setMediaIndex(currentMediaIndex + 1);
-  };
-
-  const previous = () => {
-    setMediaIndex(currentMediaIndex - 1);
-  };
-
-  const seekForward = () => {
-    if (video) {
-      video.currentTime += 10;
-    }
-  };
-
-  const seekBackward = () => {
-    if (video) {
-      video.currentTime -= 10;
-    }
-  };
-
   return (
     <StyledControlsContainer>
-      <div onClick={previous}>
+      <div onClick={onPrevious}>
         <PreviousIcon />
       </div>
-      <div onClick={seekBackward}>
+      <div onClick={onSeekBackward}>
         <BackwardIcon />
       </div>
-      <div onClick={togglePlay}>{isPlaying ? <PauseIcon /> : <PlayIcon />}</div>
-      <div onClick={seekForward}>
+      <div onClick={onTogglePlay}>
+        {isPlaying ? <PauseIcon /> : <PlayIcon />}
+      </div>
+      <div onClick={onSeekForward}>
         <ForwardIcon />
       </div>
-      <div onClick={next}>
+      <div onClick={onNext}>
         <NextIcon />
       </div>
     </StyledControlsContainer>

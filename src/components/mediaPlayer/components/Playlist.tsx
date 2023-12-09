@@ -52,7 +52,6 @@ export const Playlist = ({
           </div>
           <button
             onClick={() => {
-              console.log(currentMediaIndex, index);
               if (currentMediaIndex >= index) {
                 setCurrentMediaIndex(currentMediaIndex - 1);
               }

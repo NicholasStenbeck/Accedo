@@ -5,7 +5,6 @@ import {
   StyledMediaPlayerContainer,
 } from "./mediaPlayer/Mediaplayer.styles";
 import { getDefaultMedia } from "utils/getDefaultMedia.utils";
-import { Media } from "utils/types";
 
 const defaultMedia = getDefaultMedia();
 
@@ -35,9 +34,7 @@ export const MediaPlayer = () => {
     );
   };
 
-  const removeMedia = (media: Media) => {
-    const index = playlist.findIndex((m) => m === media);
-
+  const removeMedia = (index: number) => {
     // If removing media earlier than current media, we need to
     // adjust the current media index to not change the current media playing
     if (currentMediaIndex && currentMediaIndex >= index) {
@@ -84,9 +81,7 @@ export const MediaPlayer = () => {
         playlist={playlist}
         onAddMedia={(media) => setPlaylist([...playlist, media])}
         onRemoveMedia={removeMedia}
-        onSelectMedia={(media) =>
-          changeMedia(playlist.findIndex((m) => m === media))
-        }
+        onSelectMediaIndex={changeMedia}
       />
     </StyledMediaPlayerContainer>
   );

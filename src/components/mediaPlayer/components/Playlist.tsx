@@ -10,8 +10,8 @@ type PlaylistProps = {
   selectedIndex: number;
   playlist: Media[];
   onAddMedia: (media: Media) => void;
-  onRemoveMedia: (media: Media) => void;
-  onSelectMedia: (media: Media) => void;
+  onRemoveMedia: (index: number) => void;
+  onSelectMediaIndex: (index: number) => void;
 };
 
 export const Playlist = ({
@@ -19,7 +19,7 @@ export const Playlist = ({
   playlist,
   onAddMedia,
   onRemoveMedia,
-  onSelectMedia,
+  onSelectMediaIndex,
 }: PlaylistProps) => {
   const [inputValue, setInputValue] = useState("");
 
@@ -56,11 +56,11 @@ export const Playlist = ({
         >
           <div
             className="media-list-item-title"
-            onClick={() => onSelectMedia(media)}
+            onClick={() => onSelectMediaIndex(index)}
           >
             {media.title}
           </div>
-          <button onClick={() => onRemoveMedia(media)}>X</button>
+          <button onClick={() => onRemoveMedia(index)}>X</button>
         </StyledPlaylistItem>
       ))}
     </StyledPlaylistContainer>
